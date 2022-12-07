@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart JS</title>
+</head>
+<body>
+    <!-- <input id="month" placeholder="month" /> -->
+    <select name="months" defaultValue="MAY" value="" id="month">
+        <option value='none'>--Select Month--</option>
+        <option selected value='JAN'>JAN</option>
+        <option value='FEB'>FEB</option>
+        <option value='MAR'>MAR</option>
+        <option value='APR'>APR</option>
+        <option value='MAY'>MAY</option>
+        <option value='JUNE'>JUNE</option>
+        <option value='JULY'>July</option>
+        <option value='AUG'>AUG</option>
+        <option value='SEP'>SEP</option>
+        <option value='OCT'>OCT</option>
+        <option value='NOV'>NOV</option>
+        <option value='DEC'>DEC</option>
+      </select>
+
+    <input id="performance" placeholder="performance" />
+    <input id="attendance" placeholder="attendance" />
+    <button id="btn">Add New Data</button>
+    <button id="btndelete">Delete</button>
+
+    <canvas id="chart" height="100" >
+
+    </canvas>
+    
+</body>
+</html>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" >
+        //globally setting the variables
+        var ctx, chart
+
+        // load of the website added the event to create the chart
+        window.addEventListener('load',function() {
+
+            // adding eventlistner to add data
+            var btn  = document.getElementById("btn")
+            btn.addEventListener("click" , ()=> {addData(chart) })
+
+            // adding eventlistner to delete data & also using closures here 
+            var btnDelete  = document.getElementById("btndelete")
+            btnDelete.addEventListener("click" , ()=> {deleteData(chart) })
+
+            // getting the chart div
+            ctx = document.getElementById("chart")
+
+            // creating a new chart here 
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                labels: ['JAN', 'FEB', 'MAR', 'APRL', 'MAY', 'JUNE' , 'JULY' , 'AUG' , 'SEP' , 'OCT' , 'NOV' , 'DEC'],
+                datasets: [{
+                    label: 'Attendance',
+                    data: [12, 19, 9, 14, 12, 3, 20, 12, 15, 16, 11, 21],
+                    borderWidth: 1,
+                    backgroundColor : "rgb(253,216,53)",
+                },
+                {
+                    label: 'Performance',
+                    data: [22, 15, 3, 15, 2, 13, 24, 18, 11, 12, 17, 17],
+                    borderWidth: 1,
+                    backgroundColor : "rgb(48,112,240)",
+                }
+            ]
+                },
+                options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                }
+                }
+            });
+        })
+
+        // add data function
+        function addData (chart) {
+            let month = document.getElementById("month").value
+            let performance = document.getElementById("performance").value
+            let attendance = document.getElementById("attendance").value
+
+            if (month&&performance&&attendance) {
+                chart.data.labels.push(month)
+                chart.data.datasets[0].data.push(attendance)
+                chart.data.datasets[1].data.push(performance)
+                chart.update()
+            }
+            else {
+                alert("fill all the details")
+            }
+        }
+
+        //delete data function
+        function deleteData (chart) {
+            chart.data.labels.pop()
+            chart.data.datasets[0].data.pop()
+            chart.data.datasets[1].data.pop()
+            chart.update()
+        }
+</script>
